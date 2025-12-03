@@ -4,8 +4,7 @@ const ptero = require('../lib/pterodactyl');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('ptero-list')
-    .setDescription('Lists all Pterodactyl servers accessible via the API')
-    .addBooleanOption(opt => opt.setName('details').setDescription('Fetch detailed status for each server (slower)').setRequired(false)),
+    .setDescription('Lists all Pterodactyl servers accessible via the API'),
   admin: true,
   async execute(interaction) {
     await interaction.deferReply();
@@ -30,26 +29,6 @@ module.exports = {
         const end = start + ITEMS_PER_PAGE;
         const pageItems = data.slice(start, end);
         const summaries = pageItems.map(s => ptero.normalizeServer(s));
-
-        // Fetch live status for displayed servers
-        const promises = summaries.map(s => {
-          const id = s.uuid || s.identifier;
-          if (!id) return Promise.resolve(null);
-          return ptero.getStatus(id).catch(() => null);
-        });
-
-        const results = await Promise.all(promises);
-        results.forEach((r, idx) => {
-          if (r) {
-            let updated;
-            if (r && typeof r === 'object' && r.status) updated = r.status;
-            else {
-              const ns = ptero.normalizeServer(r?.data || r);
-              updated = ns?.status;
-            }
-            summaries[idx].status = updated || summaries[idx].status;
-          }
-        });
 
         const embed = new EmbedBuilder()
           .setTitle(`Pterodactyl Servers(${data.length})`)
@@ -88,12 +67,12 @@ module.exports = {
           .addComponents(
             new ButtonBuilder()
               .setCustomId('prev')
-              .setLabel('Previous')
+              .setEmoji('⬅️')
               .setStyle(ButtonStyle.Primary)
               .setDisabled(page === 0),
             new ButtonBuilder()
               .setCustomId('next')
-              .setLabel('Next')
+              .setEmoji('➡️')
               .setStyle(ButtonStyle.Primary)
               .setDisabled(page === totalPages - 1)
           );
@@ -131,12 +110,12 @@ module.exports = {
           .addComponents(
             new ButtonBuilder()
               .setCustomId('prev')
-              .setLabel('Previous')
+              .setEmoji('⬅️')
               .setStyle(ButtonStyle.Primary)
               .setDisabled(true),
             new ButtonBuilder()
               .setCustomId('next')
-              .setLabel('Next')
+              .setEmoji('➡️')
               .setStyle(ButtonStyle.Primary)
               .setDisabled(true)
           );
