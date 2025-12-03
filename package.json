@@ -8,7 +8,7 @@
     "register-commands": "node src/sync-commands.js",
     "delete-commands": "node src/delete-commands.js"
   },
-  "author": "",
+  "author": "Arthur Augis",
   "license": "MIT",
   "dependencies": {
     "discord.js": "^14.11.0",
