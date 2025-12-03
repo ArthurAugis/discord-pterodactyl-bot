@@ -1,0 +1,20 @@
+{
+  "name": "discord-server-manager",
+  "version": "0.1.0",
+  "description": "A Discord bot to manage Pterodactyl servers and deploy site updates",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "register-commands": "node src/sync-commands.js",
+    "delete-commands": "node src/delete-commands.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.0.3",
+    "node-fetch": "^3.3.2",
+    "node-ssh": "^13.0.0",
+    "axios": "^1.4.0"
+  }
+}
